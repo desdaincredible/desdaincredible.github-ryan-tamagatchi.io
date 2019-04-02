@@ -39,7 +39,6 @@ body {
 
   .item4 {
     grid-area: d;
-    text-align: center;
   }
 
   .item5 {
@@ -72,3 +71,23 @@ input[type=text], select {
     text-align: center;
   }
 
+img {
+    position: relative;
+}
+
+#walking {
+    animation-duration: 4s;
+    animation-name: moving;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    position: -webkit-sticky;
+}
+
+@keyframes moving {
+    from {
+        left: 5%;
+    }
+    to {
+        right: 5%;
+    }
+}

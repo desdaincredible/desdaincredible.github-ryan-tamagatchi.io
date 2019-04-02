@@ -166,7 +166,10 @@ const createStatDivs = () => {
     }  
     
 const makeTamaImg = () => {
-    $('.item4').append('<img src="Images/walking.gif">');
+    $('.item4').append('<img id="walking" src="Images/walking.gif">');
+    $('#walking').animate({
+        left: '+=600',
+    });
 }
 
 const namePet = () => {
