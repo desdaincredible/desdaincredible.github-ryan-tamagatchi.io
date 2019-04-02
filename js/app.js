@@ -32,11 +32,6 @@ let boredom = tamagatchi.boredom;
 let age = tamagatchi.age;
 let death = tamagatchi.death;
 
-let bHunger = berserkTama.hunger;
-let bSleepiness = berserkTama.sleepiness;
-let bBoredom = berserkTama.boredom;
-let bDeath = berserkTama.death;
-
 // Morph your pet at certain ages.
 class Berserk extends Tamagatchi {
     constructor(name, beserk){
@@ -50,173 +45,207 @@ class Berserk extends Tamagatchi {
 }
 const berserkTama = new Berserk('name', 'berserkMode');
 
-// time stuff
+// simplify variable names
+let bHunger = berserkTama.hunger;
+let bSleepiness = berserkTama.sleepiness;
+let bBoredom = berserkTama.boredom;
+let bDeath = berserkTama.death;
+
+////// Time stuff (secondsGoUP has too much crap) ////////
 let timePassing;
 let seconds = 0;
+
+// CLEAN UP ONCE WORKING, SPLIT INTO NEW FUNCTIONS & CALL THEM
+const tamagatchiStatIncrease = () => {
+        // Increase your pet's age every x minutes (5 seconds)
+        if (seconds % 10 === 0){
+            age++;
+            $('.age').text('AGE: ' + age);
+        }
+    
+        // Increase your pet's Hunger
+        if (seconds % 7 === 0){
+            hunger++;
+            $('.hunger').text('HUNGER: ' + hunger);
+        }
+    
+        // Increase pet's Sleepiness 
+        if (seconds % 10 === 0){
+            sleepiness++;
+            $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
+        }
+    
+        // Increase pet's Bored metrics
+        if (seconds % 6 === 0){
+            boredom++;
+            $('.boredom').text('BOREDOM: ' + boredom)
+        }
+}
+
+// const berserkStatIncrease = () => {
+//     // Increase your pet's Hunger
+//     if (seconds % 6 === 0){
+//         bHunger++;
+//         $('.hunger').text('HUNGER: ' + bHunger);
+//     }
+
+//     // Increase pet's Sleepiness 
+//     if (seconds % 8 === 0){
+//         bSleepiness++;
+//         $('.sleepiness').text('SLEEPINESS: ' + bSleepiness)
+//     }
+
+//     // Increase pet's Bored metrics
+//     if (seconds % 4 === 0){
+//         bBoredom++;
+//         $('.boredom').text('BOREDOM: ' + bBoredom)
+//     }
+// }
 
 const secondsGoUp = () => {
     seconds++;
     console.log(seconds);
 
-if (tamagatchi){
-
-    // Increase your pet's age every x minutes (5 seconds)
-    if (seconds % 10 === 0){
-        age++;
-        $('.age').text('AGE: ' + age);
+    if (tamagatchi){
+        tamagatchiStatIncrease();
+        tamagatchiDeathCheck();
     }
 
-    // Increase your pet's Hunger
-    if (seconds % 7 === 0){
-        hunger++;
-        $('.hunger').text('HUNGER: ' + hunger);
-    }
-
-    // Increase pet's Sleepiness 
-    if (seconds % 10 === 0){
-        sleepiness++;
-        $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
-    }
-
-    // Increase pet's Bored metrics
-    if (seconds % 6 === 0){
-        boredom++;
-        $('.boredom').text('BOREDOM: ' + boredom)
-    }
-    
-    // Your pet should die of Hunger, Boredom, or Sleepiness hits 10.
-    if (seconds % 1 === 0) {
-        if (hunger >= 11){
-            clearInterval(timePassing);
-            window.alert(`${name} has died of hunger`);
-        } else if (sleepiness >= 11){
-            clearInterval(timePassing);
-            window.alert(`${name} has died of sleepiness`);
-        } else if (boredom >= 11){
-            clearInterval(timePassing);
-            window.alert(`${name} has died of boredom`);
-        }
-    }
-}
-
-if (berserkTama) {
-    
-        // Increase your pet's Hunger
-        if (seconds % 6 === 0){
-            bHunger++;
-            $('.hunger').text('HUNGER: ' + bHunger);
-        }
-    
-        // Increase pet's Sleepiness 
-        if (seconds % 8 === 0){
-            bSleepiness++;
-            $('.sleepiness').text('SLEEPINESS: ' + bSleepiness)
-        }
-    
-        // Increase pet's Bored metrics
-        if (seconds % 4 === 0){
-            bBoredom++;
-            $('.boredom').text('BOREDOM: ' + bBoredom)
-        }
-        
-        // Berserk pet should die of Hunger, Boredom, or Sleepiness hits 15.
-        if (seconds % 1 === 0) {
-            if (bHunger >= 16){
-                clearInterval(timePassing);
-                window.alert(`You failed to feed ${name} enough human effigies. They are dead now.`);
-            } else if (bSleepiness >= 16){
-                clearInterval(timePassing);
-                window.alert(`${name} went full on zombie. Hope they don’t come for your brains.`);
-            } else if (bBoredom >= 16){
-                clearInterval(timePassing);
-                window.alert(`You’re too boring for ${name}. You have killed them.`);
-            }
-        }
-}
+    // if (berserkTama) {
+    //     berserkStatIncrease();
+    //     berserkDeathCheck();
+    // }
 
 }
 
-// sets up seconds
-$('#start').click(function(){
-    timePassing = setInterval(secondsGoUp, 1000);
-})
-
-//stops timer
-$('#stop').click(function(){
-    clearInterval(timePassing);
-})
+// DON'T FORGET TO SLOW GAME DOWN 
+const startGame = () => {
+    $('.item3').append('<button id="start">PLAY</button>');
+    // sets up seconds
+    $('#start').click(function(){
+        timePassing = setInterval(secondsGoUp, 500);
+    })
+    }
+    
+const pauseGame = () => {
+    $('.item3').append('<button id="stop">PAUSE</button>');
+    //stops timer
+    $('#stop').click(function(){
+        clearInterval(timePassing);
+    })
+}
 
 const createStatDivs = () => {
-// Age
-$('.item1').append('<div class="age">AGE: </div>');
+    // Age
+    $('.item1').append('<div class="age">AGE: </div>');
+    
+    // Hunger
+    $('.item1').append('<div class="hunger">HUNGER: </div>');
+    
+    // Sleepiness
+    $('.item1').append('<div class="sleepiness">SLEEPINESS: </div>');
+    
+    // Bored
+    $('.item1').append('<div class="boredom">BOREDOM: </div>');
+    
+    }   
 
-// Hunger
-$('.item1').append('<div class="hunger">HUNGER: </div>');
-
-// Sleepiness
-$('.item1').append('<div class="sleepiness">SLEEPINESS: </div>');
-
-// Bored
-$('.item1').append('<div class="boredom">BOREDOM: </div>');
-
-}
-createStatDivs();
+const namePet = () => {
+    $('form').on('submit', (e) => {
+        e.preventDefault();
+        const inputValue = $('#input-name').val();
+        name = inputValue;
+        $('.item2').append(`<div class="name-line">${name}</div>`);
+        $('form').remove();
+        createStatDivs();
+        startGame();
+        pauseGame();
+        feedButton()
+        sleepButton()
+        playButton();
+    })
+    }
+namePet()
 
 const feedButton = () => {
+    $('.item5').append('<button id="feed-btn">FEED</button>');
     $('#feed-btn').click(function(){
         hunger--;
         $('.hunger').text('HUNGER: ' + hunger);
     })
 }
 
-feedButton()
-
 const sleepButton = () => {
+    $('.item5').append('<button id="sleep-btn">SLEEP</button>');
     $('#sleep-btn').click(function(){
         sleepiness--;
         $('.sleepiness').text('SLEEPINESS: ' + sleepiness);
     })
 }
 
-sleepButton()
-
 const playButton = () => {
+    $('.item5').append('<button id="play-btn">PLAY</button>');
     $('#play-btn').click(function(){
         boredom--;
         $('.boredom').text('BOREDOM: ' + boredom);
     })
 }
 
-playButton();
-
-const namePet = () => {
-$('form').on('submit', (e) => {
-    e.preventDefault();
-    const inputValue = $('#input-name').val();
-    name = inputValue;
-    $('.item2').append(`<div class="name-line">${name}.</div>`);
-    $('form').remove();
-})
-}
-namePet()
-
 const playAgain = () => {
-    if (hunger === 10 && sleepiness === 10 && boredom === 10){    name = "";
-    age = 0;
-    hunger = 0;
-    sleepiness = 0;
-    boredom = 0;
+    if (death === true){ 
+        $('.item2').append('<button class="play-again">Play again?</button>');
+        namePet();  
+        age = 0;
+        hunger = 0;
+        sleepiness = 0;
+        boredom = 0;
     }
+}
+
+const tamagatchiDeathCheck = () => {
+        // Your pet should die of Hunger, Boredom, or Sleepiness hits 10.
+        if (seconds % 1 === 0) {
+            if (hunger >= 11){
+                clearInterval(timePassing);
+                window.alert(`${name} has died of hunger`);
+            } else if (sleepiness >= 11){
+                clearInterval(timePassing);
+                window.alert(`${name} has died of sleepiness`);
+            } else if (boredom >= 11){
+                clearInterval(timePassing);
+                window.alert(`${name} has died of boredom`);
+            }
+        }
+}
+
+const berserkDeathCheck = () => {
+            // Berserk pet should die of Hunger, Boredom, or Sleepiness hits 15.
+            if (seconds % 1 === 0) {
+                if (bHunger >= 16){
+                    clearInterval(timePassing);
+                    window.alert(`You failed to feed ${name} enough human effigies. They are dead now.`);
+                } else if (bSleepiness >= 16){
+                    clearInterval(timePassing);
+                    window.alert(`${name} went full on zombie. Hope they don’t come for your brains.`);
+                } else if (bBoredom >= 16){
+                    clearInterval(timePassing);
+                    window.alert(`You’re too boring for ${name}. You have killed them.`);
+                }
+            }
 }
 
 // const render = () => {
 //     // check stats if < 10
 // }
 
-
 // Morph your pet at certain ages.
+
+// if (age >= 10){
 const goBerserk = () => {
-// have this button show up when tama reaches age 10
-$('.item3').append('<button class="berserk-btn">GO BERSERK</button>');
-$('.berserk-btn').on('click', berserkTama.berserkMode);
+    tamagatchi = berserkTama;
+    // have this button show up when tama reaches age 10
+    $('.item3').append('<button class="berserk-btn">GO BERSERK</button>');
+    $('.berserk-btn').on('click', berserkTama.berserkMode);
+    // CHANGE IMAGE OF PET ONCE CREATED
 }
+
