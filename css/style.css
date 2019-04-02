@@ -3,69 +3,56 @@ body {
     letter-spacing: .25em;
     line-height: 2em;
     color: white;
-    font-size: 30px;
+    font-size: 26px;
 }
 
 .grid-container {
     display: grid;
     grid-template-columns: auto auto auto;
     background: url("/Users/moosesdeuces/sei-june-bug/4-1-tamagatchi/tamagatchi/tamagatchi/Images/background.jpg");
-    height: 625px;
+    height: 100%;
     width: 100%;
     grid-template-columns: repeat(6, 1fr);
     grid-template-areas: 
     "a a b b c c"
     "a a b b c c"
-    "d d e e f f"
-    "d d e e f f";
+    "d d d d d d"
+    "e e e e e e";
   }
 
   .item1 {
     grid-area: a;
-    padding: 30px;
+    padding: 30px 30px 0px 30px;
   }
 
   .item2 {
     grid-area: b;
     text-align: center;
-    padding: 30px;
+    padding: 30px 30px 0px 30px;
   }
 
   .item3 {
     grid-area: c;
-    padding: 30px;
+    padding: 30px 30px 0px 30px;
     text-align: right;
-    font-family: 'Montserrat', sans-serif;
-    letter-spacing: .25em;
-    line-height: 2em;
-    font-size: 15px;
-    padding: 10px;
-    margin: 10px;
-    border-radius: .5em;
   }
 
   .item4 {
     grid-area: d;
-    padding: 30px;
+    text-align: center;
   }
 
   .item5 {
     grid-area: e;
     text-align: center;
-    padding-top: 200px;
-
-  }
-
-  .item6 {
-    grid-area: f;
-    padding: 30px;
+    padding-bottom: 30px;
   }
 
   button {
     font-family: 'Montserrat', sans-serif;
     letter-spacing: .25em;
     line-height: 2em;
-    font-size: 20px;
+    font-size: 18px;
     padding-right: 10px;
     padding-left: 10px;
     margin: 10px;

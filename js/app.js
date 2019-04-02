@@ -23,7 +23,7 @@ class Tamagatchi {
 }
 
 // Instatiate your Tomagotchi
-const tamagatchi = new Tamagatchi(); //put input info, once retrieved and working
+let tamagatchi = new Tamagatchi(); //put input info, once retrieved and working
 
 // simplify variable names
 let hunger = tamagatchi.hunger;
@@ -40,7 +40,13 @@ class Berserk extends Tamagatchi {
     }
     // berserk button that changes tamagotchi's color, background too?
     berserkMode() {
+        berserkStatIncrease();
+        berserkDeathCheck();
         $('.grid-container').css('background', 'url(Images/background-berserk.jpg)');
+        $('.item5').empty();
+        berserkFeedButton();
+        berserkSleepButton();
+        berserkPlayButton();
     }
 }
 const berserkTama = new Berserk('name', 'berserkMode');
@@ -51,71 +57,80 @@ let bSleepiness = berserkTama.sleepiness;
 let bBoredom = berserkTama.boredom;
 let bDeath = berserkTama.death;
 
-////// Time stuff (secondsGoUP has too much crap) ////////
 let timePassing;
 let seconds = 0;
 
-// CLEAN UP ONCE WORKING, SPLIT INTO NEW FUNCTIONS & CALL THEM
+// INCREASE AGE TIME FOR ACTUAL PLAY
 const tamagatchiStatIncrease = () => {
         // Increase your pet's age every x minutes (5 seconds)
-        if (seconds % 10 === 0){
+        if (seconds % 3 === 0){
             age++;
             $('.age').text('AGE: ' + age);
         }
     
         // Increase your pet's Hunger
-        if (seconds % 7 === 0){
+        if (seconds % 5 === 0){
             hunger++;
             $('.hunger').text('HUNGER: ' + hunger);
         }
     
         // Increase pet's Sleepiness 
-        if (seconds % 10 === 0){
+        if (seconds % 7 === 0){
             sleepiness++;
             $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
         }
     
         // Increase pet's Bored metrics
-        if (seconds % 6 === 0){
+        if (seconds % 4 === 0){
             boredom++;
             $('.boredom').text('BOREDOM: ' + boredom)
         }
 }
 
-// const berserkStatIncrease = () => {
-//     // Increase your pet's Hunger
-//     if (seconds % 6 === 0){
-//         bHunger++;
-//         $('.hunger').text('HUNGER: ' + bHunger);
-//     }
+const berserkStatIncrease = () => {
+    // Increase your pet's age every x minutes (5 seconds)
+    if (seconds % 3 === 0){
+        age++;
+        $('.age').text('AGE: ' + age);
+    }
+    
+    // Increase your pet's Hunger
+    if (seconds % 3 === 0){
+        hunger++;
+        $('.hunger').text('HUNGER: ' + hunger);
+    }
+    
+    // Increase pet's Sleepiness 
+    if (seconds % 5 === 0){
+        sleepiness++;
+        $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
+    }
+    
+    // Increase pet's Bored metrics
+    if (seconds % 3 === 0){
+        boredom++;
+        $('.boredom').text('BOREDOM: ' + boredom)
+    }
+}
 
-//     // Increase pet's Sleepiness 
-//     if (seconds % 8 === 0){
-//         bSleepiness++;
-//         $('.sleepiness').text('SLEEPINESS: ' + bSleepiness)
-//     }
-
-//     // Increase pet's Bored metrics
-//     if (seconds % 4 === 0){
-//         bBoredom++;
-//         $('.boredom').text('BOREDOM: ' + bBoredom)
-//     }
+// Morph your pet at certain ages.
+// const goBerserk = () => {
+//     // have this button show up when tama reaches age 10
+//     $('.item3').append('<button class="berserk-btn">GO BERSERK</button>');
+//     $('.berserk-btn-div').on('click', berserkTama.berserkMode);
+//     // CHANGE IMAGE OF PET ONCE CREATED
 // }
 
 const secondsGoUp = () => {
     seconds++;
     console.log(seconds);
 
-    if (tamagatchi){
+    if (age < 10) {
         tamagatchiStatIncrease();
-        tamagatchiDeathCheck();
+        tamagatchiDeathCheck();    
+    } else {
+        berserkTama.berserkMode();
     }
-
-    // if (berserkTama) {
-    //     berserkStatIncrease();
-    //     berserkDeathCheck();
-    // }
-
 }
 
 // DON'T FORGET TO SLOW GAME DOWN 
@@ -123,7 +138,7 @@ const startGame = () => {
     $('.item3').append('<button id="start">PLAY</button>');
     // sets up seconds
     $('#start').click(function(){
-        timePassing = setInterval(secondsGoUp, 500);
+        timePassing = setInterval(secondsGoUp, 200);
     })
     }
     
@@ -148,14 +163,18 @@ const createStatDivs = () => {
     // Bored
     $('.item1').append('<div class="boredom">BOREDOM: </div>');
     
-    }   
+    }  
+    
+const makeTamaImg = () => {
+    $('.item4').append('<img src="Images/walking.gif">');
+}
 
 const namePet = () => {
     $('form').on('submit', (e) => {
         e.preventDefault();
         const inputValue = $('#input-name').val();
         name = inputValue;
-        $('.item2').append(`<div class="name-line">${name}</div>`);
+        $('.item3').append(`<div class="name-line">${name}</div>`);
         $('form').remove();
         createStatDivs();
         startGame();
@@ -163,13 +182,22 @@ const namePet = () => {
         feedButton()
         sleepButton()
         playButton();
+        makeTamaImg();
     })
     }
 namePet()
 
 const feedButton = () => {
-    $('.item5').append('<button id="feed-btn">FEED</button>');
-    $('#feed-btn').click(function(){
+        $('.item5').append('<button id="feed-btn">FEED</button>');
+            $('#feed-btn').click(function(){
+            hunger--;
+            $('.hunger').text('HUNGER: ' + hunger);
+        })
+}
+
+const berserkFeedButton = () => {
+    $('.item5').append('<button id="feed-btn">FEED LIFE FORCES</button>');
+        $('#feed-btn').click(function(){
         hunger--;
         $('.hunger').text('HUNGER: ' + hunger);
     })
@@ -183,8 +211,24 @@ const sleepButton = () => {
     })
 }
 
+const berserkSleepButton = () => {
+    $('.item5').append('<button id="sleep-btn">ZOMBIFY</button>');
+    $('#sleep-btn').click(function(){
+        sleepiness--;
+        $('.sleepiness').text('SLEEPINESS: ' + sleepiness);
+    })
+}
+
 const playButton = () => {
     $('.item5').append('<button id="play-btn">PLAY</button>');
+    $('#play-btn').click(function(){
+        boredom--;
+        $('.boredom').text('BOREDOM: ' + boredom);
+    })
+}
+
+const berserkPlayButton = () => {
+    $('.item5').append('<button id="play-btn">CAUSE CHAOS</button>');
     $('#play-btn').click(function(){
         boredom--;
         $('.boredom').text('BOREDOM: ' + boredom);
@@ -204,7 +248,7 @@ const playAgain = () => {
 
 const tamagatchiDeathCheck = () => {
         // Your pet should die of Hunger, Boredom, or Sleepiness hits 10.
-        if (seconds % 1 === 0) {
+        // if (seconds % 1 === 0) {
             if (hunger >= 11){
                 clearInterval(timePassing);
                 window.alert(`${name} has died of hunger`);
@@ -215,19 +259,19 @@ const tamagatchiDeathCheck = () => {
                 clearInterval(timePassing);
                 window.alert(`${name} has died of boredom`);
             }
-        }
+        // }
 }
 
 const berserkDeathCheck = () => {
             // Berserk pet should die of Hunger, Boredom, or Sleepiness hits 15.
             if (seconds % 1 === 0) {
-                if (bHunger >= 16){
+                if (hunger >= 16){
                     clearInterval(timePassing);
                     window.alert(`You failed to feed ${name} enough human effigies. They are dead now.`);
-                } else if (bSleepiness >= 16){
+                } else if (sleepiness >= 16){
                     clearInterval(timePassing);
                     window.alert(`${name} went full on zombie. Hope they don’t come for your brains.`);
-                } else if (bBoredom >= 16){
+                } else if (boredom >= 16){
                     clearInterval(timePassing);
                     window.alert(`You’re too boring for ${name}. You have killed them.`);
                 }
@@ -238,14 +282,4 @@ const berserkDeathCheck = () => {
 //     // check stats if < 10
 // }
 
-// Morph your pet at certain ages.
-
-// if (age >= 10){
-const goBerserk = () => {
-    tamagatchi = berserkTama;
-    // have this button show up when tama reaches age 10
-    $('.item3').append('<button class="berserk-btn">GO BERSERK</button>');
-    $('.berserk-btn').on('click', berserkTama.berserkMode);
-    // CHANGE IMAGE OF PET ONCE CREATED
-}
 
