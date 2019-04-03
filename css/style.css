@@ -29,6 +29,7 @@ body {
     grid-area: b;
     text-align: center;
     padding: 30px 30px 0px 30px;
+    line-height: 1.35em;
   }
 
   .item3 {
@@ -76,6 +77,7 @@ img {
 }
 
 #walking {
+    padding: 0 200px 0 130px;
     animation-duration: 4s;
     animation-name: moving;
     animation-iteration-count: infinite;
@@ -90,4 +92,20 @@ img {
     to {
         right: 5%;
     }
+}
+
+#home {
+    padding: 15px 0 15px 0;
+}
+
+#morph {
+    padding: 0 540px 50px 540px;
+}
+
+#dead {
+    padding: 0 470px 50px 470px;
+}
+
+h1 {
+    line-height: 1em;
 }
