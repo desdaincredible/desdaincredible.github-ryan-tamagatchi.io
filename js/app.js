@@ -38,6 +38,7 @@ class Berserk extends Tamagatchi {
     }
     // berserk button that changes tamagotchi's color, background too?
     berserkMode() {
+        // beserkPerksPopup();
         berserkStatIncrease();
         berserkDeathCheck();
         $('.grid-container').css('background', 'url(Images/background-berserk.jpg)');
@@ -63,19 +64,19 @@ const tamagatchiStatIncrease = () => {
         }
     
         // Increase your pet's Hunger
-        if (seconds % 4 === 0){
+        if (seconds % 3 === 0){
             hunger++;
             $('.hunger').text('HUNGER: ' + hunger);
         }
     
         // Increase pet's Sleepiness 
-        if (seconds % 6 === 0){
+        if (seconds % 5 === 0){
             sleepiness++;
             $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
         }
     
         // Increase pet's Bored metrics
-        if (seconds % 5 === 0){
+        if (seconds % 4 === 0){
             boredom++;
             $('.boredom').text('BOREDOM: ' + boredom)
         }
@@ -95,13 +96,13 @@ const berserkStatIncrease = () => {
     }
     
     // Increase pet's Sleepiness 
-    if (seconds % 5 === 0){
+    if (seconds % 3 === 0){
         sleepiness++;
         $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
     }
     
     // Increase pet's Bored metrics
-    if (seconds % 3 === 0){
+    if (seconds % 2 === 0){
         boredom++;
         $('.boredom').text('BOREDOM: ' + boredom)
     }
@@ -124,7 +125,8 @@ const startGame = () => {
     $('.item3').append('<button id="start">PLAY</button>');
     // sets up seconds
     $('#start').click(function(){
-        timePassing = setInterval(secondsGoUp, 300);
+        timePassing = setInterval(secondsGoUp, 1000);
+        $('#popup').remove();
     })
     }
     
@@ -164,7 +166,6 @@ const makeBerserkImg = () => {
         $('.item4').append('<img style="align: center" id="morph" src="Images/morph.gif">');
     }
 }
-
 
 const namePet = () => {
     $('.item2').prepend('<h1 id="title">CHUBBY BUNNY</h1>');
@@ -236,15 +237,12 @@ const berserkPlayButton = () => {
     })
 }
 
-const playAgain = () => {
-    if (death === true){ 
-        $('.item2').append('<button class="play-again">Play again?</button>');
-        namePet();  
-        age = 0;
-        hunger = 0;
-        sleepiness = 0;
-        boredom = 0;
-    }
+const playAgain = () => { 
+    $('.item2').append('<br><button id="playAgain">PLAY AGAIN?</button>');
+    $('#playAgain').click(function(){
+        window.location.reload(true);  
+    })
+
 }
 
 const tamagatchiDeathCheck = () => {
@@ -255,17 +253,19 @@ const tamagatchiDeathCheck = () => {
                 $('#walking').remove();
                 $('.item4').append('<img id="dead" src="Images/dead.png">')
                 $('.item2').append(`${name} has died of hunger`);
-                $('.item2').append('<br><button id="playAgain">PLAY AGAIN?</button>');
+                playAgain();
             } else if (sleepiness >= 11){
                 clearInterval(timePassing);
                 $('#walking').remove();
                 $('.item4').append('<img id="dead" src="Images/dead.png">')
                 $('.item2').append(`${name} has died of sleepiness`);
+                playAgain();
             } else if (boredom >= 11){
                 clearInterval(timePassing);
                 $('#walking').remove();
                 $('.item4').append('<img id="dead" src="Images/dead.png">')
                 $('.item2').append(`${name} has died of boredom`);
+                playAgain();
             }
         // }
 }
@@ -278,23 +278,41 @@ const berserkDeathCheck = () => {
                     $('.item4').empty();
                     $('.item4').append('<img id="dead" src="Images/dead.png">')
                     $('.item2').append(`You failed to feed ${name} enough human effigies. They are dead now.`);
-                    // $('.item2').append('<br><button id="playAgain">PLAY AGAIN?</button>');
+                    playAgain();
                 } else if (sleepiness >= 16){
                     clearInterval(timePassing);
                     $('.item4').empty();
                     $('.item4').append('<img id="dead" src="Images/dead.png">')
                     $('.item2').append(`${name} went full on zombie. Hope they don’t come for your brains.`);
+                    playAgain();
                 } else if (boredom >= 16){
                     clearInterval(timePassing);
                     $('.item4').empty();
                     $('.item4').append('<img id="dead" src="Images/dead.png">')
                     $('.item2').append(`You’re too boring for ${name}. You have killed them.`);
+                    playAgain();
                 }
             }
 }
 
-// const render = () => {
-//     // check stats if < 10
+// const popupPlayButton = () => {
+//     $('.item2').empty();
+//     $('.item2').append('<button id="start">KEEP PLAYING</button>');
+//     // sets up seconds
+//     $('#start').click(function(){
+//         timePassing = setInterval(secondsGoUp, 300);
+//         // $('.item2').empty();
+//     })
 // }
+
+// const beserkPerksPopup = () => {
+//     if (age === 10 && age < 10.0001){
+//         $('.item2').empty();
+//         clearInterval(timePassing);
+//         $('.item2').append("<div id='popup'><h3>LEVEL UP</h3><p>You're now a skele-bunny! You get hungrier, sleepier and bored faster, but you don't die until levels hit 15.</p></div>");
+//     // popupPlayButton();
+//     }
+// }  
+  
 
 
