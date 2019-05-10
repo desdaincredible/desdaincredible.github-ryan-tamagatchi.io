@@ -40,13 +40,13 @@ const tamagatchiStatIncrease = () => {
     // Increase pet's Sleepiness 
     if (seconds % 3 === 0){
         sleepiness++;
-        $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
+        $('.sleepiness').text('SLEEPINESS: ' + sleepiness);
     }
 
     // Increase pet's Bored metrics
     if (seconds % 2 === 0){
         boredom++;
-        $('.boredom').text('BOREDOM: ' + boredom)
+        $('.boredom').text('BOREDOM: ' + boredom);
     }
 }
 const deathSequence = () => {
