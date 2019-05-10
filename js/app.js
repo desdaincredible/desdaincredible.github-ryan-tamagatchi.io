@@ -52,6 +52,7 @@ const tamagatchiStatIncrease = () => {
 const deathSequence = () => {
     clearInterval(timePassing);
     $('#column2').empty();
+    $('#column3').empty();
     $('.btn').remove();
 }
 const tamagatchiDeathCheck = () => {
@@ -94,6 +95,12 @@ const pauseGame = () => {
         clearInterval(timePassing);
     })
 }
+const playGame = () => {
+    $('#column3').append('<br><button class="btn btn-success" id="playAgain">PLAY</button>');
+    $('#playAgain').click(function(){
+        timePassing = setInterval(secondsGoUp, 1000);
+    })
+}
 const startGame = () => {
     $('.container-fluid').css('background', 'none');
     $('#column2').append("<div id='press-play'><h2>Don't let hunger, sleepiness, or boredom get above 10!</h2></div>");
@@ -107,6 +114,7 @@ const startGame = () => {
         sleepButton();
         playButton();
         pauseGame();
+        playGame();
 
     })
     }
