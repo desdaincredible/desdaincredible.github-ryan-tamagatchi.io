@@ -5,7 +5,7 @@ class Tamagatchi {
     hunger = 0;
     sleepiness = 0;
     boredom = 0;
-    age = 20;
+    age = 0;
     messagesRight = ["Images/message1.png", "Images/message2.png", "Images/message7.png", 
             "Images/message8.png", "Images/message9.png", "Images/message10.png",  
             "Images/message14.png", "Images/message15.png" ];
