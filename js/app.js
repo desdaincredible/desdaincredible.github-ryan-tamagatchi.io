@@ -51,7 +51,7 @@ const tamagatchiStatIncrease = () => {
 }
 const deathSequence = () => {
     clearInterval(timePassing);
-    $('#column2').empty();
+    $('#comic').remove();
     $('#column3').empty();
     $('.btn').remove();
 }
