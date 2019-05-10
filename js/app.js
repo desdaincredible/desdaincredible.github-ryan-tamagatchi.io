@@ -1,16 +1,3 @@
-// fix bug with death alert
-
-// Morph your pet at certain ages.
-// Animate your pet across the screen while it's alive.
-// Extras
-// Have your tomagotchi give birth to baby tomagotchi...
-// ...with special powers (extend the class)!
-// Add an excercise() method to your tomagotchi, that affects certain properties
-// Add anything you can think of... use your imagination!
-
-
-
-// Create a Class (JS Class, look at your notes if your forget) for your tomagotchi
 class Tamagatchi {
     constructor(name) {
         name = this.name;
@@ -19,300 +6,177 @@ class Tamagatchi {
     sleepiness = 0;
     boredom = 0;
     age = 0;
+    messagesRight = ["Images/message1.png", "Images/message2.png", "Images/message7.png", 
+            "Images/message8.png", "Images/message9.png", "Images/message10.png",  
+            "Images/message14.png", "Images/message15.png" ];
+    messagesLeft = ["Images/message3.png", "Images/message4.png", "Images/message5.png", 
+            "Images/message6.png", "Images/message11.png", "Images/message12.png", 
+            "Images/message13.png"];
 }
 
-// Instatiate your Tomagotchi
-let tamagatchi = new Tamagatchi(); //put input info, once retrieved and working
+let tamagatchi = new Tamagatchi(); 
 
-// simplify variable names
 let hunger = tamagatchi.hunger;
 let sleepiness = tamagatchi.sleepiness;
 let boredom = tamagatchi.boredom;
 let age = tamagatchi.age;
 
-// Morph your pet at certain ages.
-class Berserk extends Tamagatchi {
-    constructor(name, beserk){
-        super(name);
-        this.beserk = beserk;
-    }
-    // berserk button that changes tamagotchi's color, background too?
-    berserkMode() {
-        // beserkPerksPopup();
-        berserkStatIncrease();
-        berserkDeathCheck();
-        $('.grid-container').css('background', 'url(Images/background-berserk.jpg)');
-        $('.item5').empty();
-        $('#walking').remove();
-        berserkFeedButton();
-        berserkSleepButton();
-        berserkPlayButton();
-        makeBerserkImg();
-    }
-}
-const berserkTama = new Berserk('name', 'berserkMode');
-
 let timePassing;
 let seconds = 0;
 
-// INCREASE AGE TIME FOR ACTUAL PLAY
 const tamagatchiStatIncrease = () => {
-        // Increase your pet's age every x minutes (5 seconds)
-        if (seconds % 3 === 0){
-            age++;
-            $('.age').text('AGE: ' + age);
-        }
-    
-        // Increase your pet's Hunger
-        if (seconds % 3 === 0){
-            hunger++;
-            $('.hunger').text('HUNGER: ' + hunger);
-        }
-    
-        // Increase pet's Sleepiness 
-        if (seconds % 5 === 0){
-            sleepiness++;
-            $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
-        }
-    
-        // Increase pet's Bored metrics
-        if (seconds % 4 === 0){
-            boredom++;
-            $('.boredom').text('BOREDOM: ' + boredom)
-        }
-}
-
-const berserkStatIncrease = () => {
     // Increase your pet's age every x minutes (5 seconds)
     if (seconds % 3 === 0){
         age++;
         $('.age').text('AGE: ' + age);
     }
-    
+
     // Increase your pet's Hunger
-    if (seconds % 2 === 0){
+    if (seconds % 1 === 0){
         hunger++;
         $('.hunger').text('HUNGER: ' + hunger);
     }
-    
+
     // Increase pet's Sleepiness 
     if (seconds % 3 === 0){
         sleepiness++;
         $('.sleepiness').text('SLEEPINESS: ' + sleepiness)
     }
-    
+
     // Increase pet's Bored metrics
     if (seconds % 2 === 0){
         boredom++;
         $('.boredom').text('BOREDOM: ' + boredom)
     }
 }
+const deathSequence = () => {
+    clearInterval(timePassing);
+    $('#column2').empty();
+    $('.btn').remove();
+}
+const tamagatchiDeathCheck = () => {
+    if (hunger > 10){
+        deathSequence();
+        $('#column3').append(`<div class="dead-notice">${name} has died of hunger</div>`);
+        playAgain();
+    } else if (sleepiness > 10){
+        deathSequence();
+        $('#column3').append(`<div class="dead-notice">${name} has died of sleepiness</div>`);
+        playAgain();
+    } else if (boredom > 10){
+        deathSequence();
+        $('#column3').append(`<div class="dead-notice">${name} has died of boredom</div>`);
+        playAgain();
+    }
+}
+const playAgain = () => { 
+    $('#column1').empty();
+    $('#column1').prepend('<a href="https://docs.google.com/spreadsheets/d/1znWbx05MRUCOxCTfNz0ai9xnkGJS2bxmo71IbLVZkxY/edit?usp=sharing"><img src="Images/dead-background.jpg"></a>');
+
+    $('#column3').append('<br><button class="btn btn-success" id="playAgain">PLAY AGAIN?</button>');
+    $('#playAgain').click(function(){
+        window.location.reload(true);  
+    })
+}
 
 const secondsGoUp = () => {
     seconds++;
     console.log(seconds);
+    tamagatchiStatIncrease();
+    tamagatchiDeathCheck();
+    changeBackground(); 
 
-    if (age < 10) {
-        tamagatchiStatIncrease();
-        tamagatchiDeathCheck();    
-    } else {
-        berserkTama.berserkMode();
-    }
 }
-
-// DON'T FORGET TO SLOW GAME DOWN 
-const startGame = () => {
-    $('.item3').append('<button id="start">PLAY</button>');
-    // sets up seconds
-    $('#start').click(function(){
-        timePassing = setInterval(secondsGoUp, 1000);
-        $('#popup').remove();
-    })
-    }
-    
 const pauseGame = () => {
-    $('.item3').append('<button id="stop">PAUSE</button>');
+    $('#column3').append('<button class="btn btn-secondary" id="stop">PAUSE</button>');
     //stops timer
     $('#stop').click(function(){
         clearInterval(timePassing);
     })
 }
+const startGame = () => {
+    $('.container-fluid').css('background', 'none');
+    $('#column2').append("<div id='press-play'><h2>Don't let hunger, sleepiness, or boredom get above 10!</h2></div>");
+    $('#column2').append('<button class="btn btn-success" id="start">PLAY GAME</button>');
+    $('#start').click(function(){
+        timePassing = setInterval(secondsGoUp, 1000);
+        $('#press-play').remove();
+        $('#start').remove();
+        $('#column2').prepend('<img id="comic" src="Images/xmen.jpg">');
+        feedButton();
+        sleepButton();
+        playButton();
+        pauseGame();
+
+    })
+    }
+
 
 const createStatDivs = () => {
-    // Age
-    $('.item1').append('<div class="age">AGE: </div>');
-    
-    // Hunger
-    $('.item1').append('<div class="hunger">HUNGER: </div>');
-    
-    // Sleepiness
-    $('.item1').append('<div class="sleepiness">SLEEPINESS: </div>');
-    
-    // Bored
-    $('.item1').append('<div class="boredom">BOREDOM: </div>');
-    
-    }  
-    
-const makeTamaImg = () => {
-    $('.item4').append('<img id="walking" src="Images/walking.gif">');
-    $('#walking').animate({
-        left: '+=600',
-    });
-}
-
-const makeBerserkImg = () => {
-    if (age === 10 && age < 10.0001){
-        $('.item4').empty();
-        $('.item4').append('<img style="align: center" id="morph" src="Images/morph.gif">');
-    }
+    $('#column1').append('<div class="age">AGE: </div>');
+    $('#column1').append('<div class="hunger">HUNGER: </div>');
+    $('#column1').append('<div class="sleepiness">SLEEPINESS: </div>');
+    $('#column1').append('<div class="boredom">BOREDOM: </div>');
 }
 
 const namePet = () => {
-    $('.item2').prepend('<h1 id="title">CHUBBY BUNNY</h1>');
-    $('.item2').append('<img id="home" src="Images/home.gif">');
+    $('#column2').prepend('<div id="title"><h1>Tomagatchi Ryan</h1><p>with plenty of ripped off Marvel images</p></div>');
     $('form').on('submit', (e) => {
         e.preventDefault();
         const inputValue = $('#input-name').val();
         name = inputValue;
-        $('.item3').append(`<div class="name-line">${name}</div>`);
+        $('#column3').append(`<div class="name-line">${name}</div>`);
         $('form').remove();
         $('#home').remove();
         $('#title').remove();
         createStatDivs();
         startGame();
-        pauseGame();
-        feedButton()
-        sleepButton()
-        playButton();
-        makeTamaImg();
     })
     }
 namePet()
 
 const feedButton = () => {
-    $('.item5').append('<button id="feed-btn">FEED</button>');
-            $('#feed-btn').click(function(){
-            hunger--;
-            $('.hunger').text('HUNGER: ' + hunger);
-            })
-}
-
-const berserkFeedButton = () => {
-    $('.item5').append('<button id="feed-btn">FEED LIFE FORCES</button>');
+    $('#column2').append('<br><button class="btn btn-warning" id="feed-btn">FEED</button>');
         $('#feed-btn').click(function(){
-        hunger--;
+            if(hunger > 0){
+                hunger--;
+            }
         $('.hunger').text('HUNGER: ' + hunger);
-    })
+        })
 }
 
 const sleepButton = () => {
-    $('.item5').append('<button id="sleep-btn">SLEEP</button>');
+    $('#column2').append('<button class="btn btn-warning" id="sleep-btn">SLEEP</button>');
     $('#sleep-btn').click(function(){
-        sleepiness--;
-        $('.sleepiness').text('SLEEPINESS: ' + sleepiness);
-    })
-}
-
-const berserkSleepButton = () => {
-    $('.item5').append('<button id="sleep-btn">ZOMBIFY</button>');
-    $('#sleep-btn').click(function(){
-        sleepiness--;
+        if(sleepiness > 0){
+            sleepiness--;
+        }
         $('.sleepiness').text('SLEEPINESS: ' + sleepiness);
     })
 }
 
 const playButton = () => {
-    $('.item5').append('<button id="play-btn">PLAY</button>');
+    $('#column2').append('<button class="btn btn-warning" id="play-btn">PLAY</button>');
     $('#play-btn').click(function(){
-        boredom--;
+        if (boredom > 0){
+            boredom--;
+        }
         $('.boredom').text('BOREDOM: ' + boredom);
     })
 }
 
-const berserkPlayButton = () => {
-    $('.item5').append('<button id="play-btn">CAUSE CHAOS</button>');
-    $('#play-btn').click(function(){
-        boredom--;
-        $('.boredom').text('BOREDOM: ' + boredom);
-    })
+const changeBackground = () => {
+    if (age >= 5 && age < 10){
+        $('#comic').remove();
+        $('#column2').prepend('<img id="comic" src="Images/hulk.jpg">');
+    } else if (age >= 10 && age < 15){
+        $('#comic').remove();
+        $('#column2').prepend('<img id="comic" src="Images/thor.jpg">');
+    } else if (age >= 15 && age < 20){
+        $('#comic').remove();
+        $('#column2').prepend('<img id="comic" src="Images/captain-america.jpg">');
+    } else if (age > 20){
+        $('#comic').remove();
+        $('#column2').prepend('<img id="comic" src="Images/spiderman.jpg">');
+    }
 }
-
-const playAgain = () => { 
-    $('.item2').append('<br><button id="playAgain">PLAY AGAIN?</button>');
-    $('#playAgain').click(function(){
-        window.location.reload(true);  
-    })
-
-}
-
-const tamagatchiDeathCheck = () => {
-        // Your pet should die of Hunger, Boredom, or Sleepiness hits 10.
-        // if (seconds % 1 === 0) {
-            if (hunger >= 11){
-                clearInterval(timePassing);
-                $('#walking').remove();
-                $('.item4').append('<img id="dead" src="Images/dead.png">')
-                $('.item2').append(`${name} has died of hunger`);
-                playAgain();
-            } else if (sleepiness >= 11){
-                clearInterval(timePassing);
-                $('#walking').remove();
-                $('.item4').append('<img id="dead" src="Images/dead.png">')
-                $('.item2').append(`${name} has died of sleepiness`);
-                playAgain();
-            } else if (boredom >= 11){
-                clearInterval(timePassing);
-                $('#walking').remove();
-                $('.item4').append('<img id="dead" src="Images/dead.png">')
-                $('.item2').append(`${name} has died of boredom`);
-                playAgain();
-            }
-        // }
-}
-
-const berserkDeathCheck = () => {
-            // Berserk pet should die of Hunger, Boredom, or Sleepiness hits 15.
-            if (seconds % 1 === 0) {
-                if (hunger >= 16){
-                    clearInterval(timePassing);
-                    $('.item4').empty();
-                    $('.item4').append('<img id="dead" src="Images/dead.png">')
-                    $('.item2').append(`You failed to feed ${name} enough human effigies. They are dead now.`);
-                    playAgain();
-                } else if (sleepiness >= 16){
-                    clearInterval(timePassing);
-                    $('.item4').empty();
-                    $('.item4').append('<img id="dead" src="Images/dead.png">')
-                    $('.item2').append(`${name} went full on zombie. Hope they don’t come for your brains.`);
-                    playAgain();
-                } else if (boredom >= 16){
-                    clearInterval(timePassing);
-                    $('.item4').empty();
-                    $('.item4').append('<img id="dead" src="Images/dead.png">')
-                    $('.item2').append(`You’re too boring for ${name}. You have killed them.`);
-                    playAgain();
-                }
-            }
-}
-
-// const popupPlayButton = () => {
-//     $('.item2').empty();
-//     $('.item2').append('<button id="start">KEEP PLAYING</button>');
-//     // sets up seconds
-//     $('#start').click(function(){
-//         timePassing = setInterval(secondsGoUp, 300);
-//         // $('.item2').empty();
-//     })
-// }
-
-// const beserkPerksPopup = () => {
-//     if (age === 10 && age < 10.0001){
-//         $('.item2').empty();
-//         clearInterval(timePassing);
-//         $('.item2').append("<div id='popup'><h3>LEVEL UP</h3><p>You're now a skele-bunny! You get hungrier, sleepier and bored faster, but you don't die until levels hit 15.</p></div>");
-//     // popupPlayButton();
-//     }
-// }  
-  
-
-
