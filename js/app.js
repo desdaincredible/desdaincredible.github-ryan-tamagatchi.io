@@ -5,7 +5,7 @@ class Tamagatchi {
     hunger = 0;
     sleepiness = 0;
     boredom = 0;
-    age = 0;
+    age = 20;
     messagesRight = ["Images/message1.png", "Images/message2.png", "Images/message7.png", 
             "Images/message8.png", "Images/message9.png", "Images/message10.png",  
             "Images/message14.png", "Images/message15.png" ];
@@ -73,19 +73,24 @@ const tamagatchiDeathCheck = () => {
 const playAgain = () => { 
     $('#column1').empty();
     $('#column1').prepend('<a href="https://docs.google.com/spreadsheets/d/1znWbx05MRUCOxCTfNz0ai9xnkGJS2bxmo71IbLVZkxY/edit?usp=sharing"><img src="Images/dead-background.jpg"></a>');
-
     $('#column3').append('<br><button class="btn btn-success" id="playAgain">PLAY AGAIN?</button>');
     $('#playAgain').click(function(){
         window.location.reload(true);  
     })
 }
-
+const winScreen = () => {
+    deathSequence();
+    playAgain();
+}
 const secondsGoUp = () => {
     seconds++;
     console.log(seconds);
     tamagatchiStatIncrease();
     tamagatchiDeathCheck();
     changeBackground(); 
+    if (age === 25){
+        winScreen();
+    }
 
 }
 const pauseGame = () => {
